@@ -1,7 +1,5 @@
 <?php
 
-// PHP 8.0
-
 declare(strict_types=1);
 
 namespace Symplify\MonorepoSplit;
@@ -13,12 +11,12 @@ final class Config
         private string $repositoryHost,
         private string $repositoryOrganization,
         private string $repositoryName,
+        private string $accessToken,
         private string $commitHash,
         private string $branch,
-        private ?string $tag,
-        private ?string $userName,
-        private ?string $userEmail,
-        private string $accessToken
+        private ?string $tag = null,
+        private ?string $userName = null,
+        private ?string $userEmail = null
     ) {
     }
 
@@ -27,14 +25,19 @@ final class Config
         return $this->packageDirectory;
     }
 
-    public function getUserName(): ?string
+    public function getGitRepository(): string
     {
-        return $this->userName;
+        return $this->repositoryHost . '/' . $this->repositoryOrganization . '/' . $this->repositoryName . '.git';
     }
 
-    public function getUserEmail(): ?string
+    public function getAccessToken(): string
     {
-        return $this->userEmail;
+        return $this->accessToken;
+    }
+
+    public function getCommitHash(): string
+    {
+        return $this->commitHash;
     }
 
     public function getBranch(): ?string
@@ -47,18 +50,13 @@ final class Config
         return $this->tag;
     }
 
-    public function getCommitHash(): string
+    public function getUserName(): ?string
     {
-        return $this->commitHash;
+        return $this->userName;
     }
 
-    public function getAccessToken(): string
+    public function getUserEmail(): ?string
     {
-        return $this->accessToken;
-    }
-
-    public function getGitRepository(): string
-    {
-        return $this->repositoryHost . '/' . $this->repositoryOrganization . '/' . $this->repositoryName . '.git';
+        return $this->userEmail;
     }
 }
