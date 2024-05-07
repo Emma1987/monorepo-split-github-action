@@ -103,11 +103,6 @@ if ($changedFiles) {
 
     exec("git commit --message '{$commitMessage}'");
     exec('git push --quiet origin ' . $config->getBranch());
-
-    // Retrieve the original branch name
-    //ScriptHelper::note('Retrieve the original branch name');
-
-    //ScriptHelper::execWithOutputPrint(sprintf('git branch --contains %s', $config->getCommitHash()));
 } else {
     ScriptHelper::note('No files to change');
 
