@@ -24,7 +24,7 @@ final class ConfigFactory
             tag: $env['INPUT_TAG'] ?? null,
             userName: $env['INPUT_USER_NAME'] ?? null,
             userEmail: $env['INPUT_USER_EMAIL'] ?? null,
-            ref: $env['GITHUB_REF'] ?? null
+            originBranch: $env['INPUT_ORIGIN_BRANCH'] ?? null
         );
     }
 }

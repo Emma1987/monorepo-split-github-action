@@ -19,7 +19,7 @@ try {
     exit(0);
 }
 
-ScriptHelper::note(sprintf('Github Ref: "%s"', $config->getRef()));
+ScriptHelper::note(sprintf('Origin branch: "%s"', $config->getOriginBranch()));
 
 $baseDir = getcwd();
 $cloneDirectory = sys_get_temp_dir() . '/monorepo_split/clone_directory';
