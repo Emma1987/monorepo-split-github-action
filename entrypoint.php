@@ -105,6 +105,13 @@ if ($changedFiles) {
     exec('git push --quiet origin ' . $config->getBranch());
 } else {
     ScriptHelper::note('No files to change');
+
+    if ($config->getBranch() !== 'master' && $config->getBranch() !== 'main') {
+        ScriptHelper::note(sprintf('Deleting branch "%s"', $config->getBranch()));
+
+        ScriptHelper::execWithOutputPrint('git checkout master');
+        ScriptHelper::execWithOutputPrint(sprintf('git branch -D %s', $config->getBranch()));
+    }
 }
 
 // Push tag if present
