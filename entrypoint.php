@@ -107,7 +107,7 @@ if ($changedFiles) {
     // Retrieve the original branch name
     ScriptHelper::note('Retrieve the original branch name');
 
-    ScriptHelper::execWithOutputPrint('git branch --contains <commit_sha>');
+    ScriptHelper::execWithOutputPrint(sprintf('git branch --contains %s', $config->getCommitHash()));
 } else {
     ScriptHelper::note('No files to change');
 
