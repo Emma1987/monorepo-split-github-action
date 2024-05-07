@@ -23,7 +23,8 @@ final class ConfigFactory
             branch: $env['INPUT_BRANCH'],
             tag: $env['INPUT_TAG'] ?? null,
             userName: $env['INPUT_USER_NAME'] ?? null,
-            userEmail: $env['INPUT_USER_EMAIL'] ?? null
+            userEmail: $env['INPUT_USER_EMAIL'] ?? null,
+            ref: $env['GITHUB_REF'] ?? null
         );
     }
 }

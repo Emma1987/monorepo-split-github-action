@@ -16,7 +16,8 @@ final class Config
         private string $branch,
         private ?string $tag = null,
         private ?string $userName = null,
-        private ?string $userEmail = null
+        private ?string $userEmail = null,
+        private ?string $ref = null
     ) {
     }
 
@@ -58,5 +59,9 @@ final class Config
     public function getUserEmail(): ?string
     {
         return $this->userEmail;
+    }
+    public function getRef(): ?string
+    {
+        return $this->ref;
     }
 }
