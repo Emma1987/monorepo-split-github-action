@@ -19,6 +19,8 @@ try {
     exit(0);
 }
 
+ScriptHelper::note(sprintf('Github Ref: "%s"', $config->getRef()));
+
 $baseDir = getcwd();
 $cloneDirectory = sys_get_temp_dir() . '/monorepo_split/clone_directory';
 $buildDirectory = sys_get_temp_dir() . '/monorepo_split/build_directory';
