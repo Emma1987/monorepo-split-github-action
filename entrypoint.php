@@ -103,9 +103,15 @@ if ($changedFiles) {
 
     exec("git commit --message '{$commitMessage}'");
     exec('git push --quiet origin ' . $config->getBranch());
+
+    // Retrieve the original branch name
+    ScriptHelper::note('Retrieve the original branch name');
+
+    ScriptHelper::execWithOutputPrint('git branch --contains <commit_sha>');
 } else {
     ScriptHelper::note('No files to change');
 
+    // Nothing to commit, delete the dev branch created previously
     if ($config->getBranch() !== 'master' && $config->getBranch() !== 'main') {
         ScriptHelper::note(sprintf('Deleting branch "%s"', $config->getBranch()));
 
