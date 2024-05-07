@@ -109,8 +109,8 @@ if ($changedFiles) {
     if ($config->getBranch() !== 'master' && $config->getBranch() !== 'main') {
         ScriptHelper::note(sprintf('Deleting branch "%s"', $config->getBranch()));
 
-        ScriptHelper::execWithOutputPrint('git checkout master');
-        ScriptHelper::execWithOutputPrint(sprintf('git branch -D %s', $config->getBranch()));
+        ScriptHelper::execWithOutputPrint('git status');
+        ScriptHelper::execWithOutputPrint(sprintf('git checkout master && git push origin --delete %s', $config->getBranch()));
     }
 }
 
