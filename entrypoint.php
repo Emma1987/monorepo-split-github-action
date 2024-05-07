@@ -19,8 +19,6 @@ try {
     exit(0);
 }
 
-ScriptHelper::note(sprintf('Origin branch: "%s"', $config->getOriginBranch()));
-
 $baseDir = getcwd();
 $cloneDirectory = sys_get_temp_dir() . '/monorepo_split/clone_directory';
 $buildDirectory = sys_get_temp_dir() . '/monorepo_split/build_directory';
@@ -106,9 +104,14 @@ if ($changedFiles) {
     exec("git commit --message '{$commitMessage}'");
     exec('git push --quiet origin ' . $config->getBranch());
 
-    ScriptHelper::note('Retrieve the original branch name');
+    if ($config->getBranch() === 'master' || $config->getBranch() === 'main') {
+        if ($config->getOriginBranch() && $config->getOriginBranch() !== 'master' && $config->getOriginBranch() !== 'main') {
+            // Delete the origin branch
+            ScriptHelper::note('Delete the origin branch');
 
-    ScriptHelper::execWithOutputPrint(sprintf('git branch --contains %s', $config->getCommitHash()));
+            ScriptHelper::execWithOutputPrint(sprintf('git branch --contains %s', $config->getOriginBranch()));
+        }
+    }
 } else {
     ScriptHelper::note('No files to change');
 
