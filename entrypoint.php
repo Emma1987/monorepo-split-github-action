@@ -119,7 +119,12 @@ if ($changedFiles) {
     if ($config->getBranch() !== 'master' && $config->getBranch() !== 'main') {
         ScriptHelper::note(sprintf('Deleting branch "%s"', $config->getBranch()));
 
-        ScriptHelper::execWithOutputPrint(sprintf('git checkout master && git push origin --delete %s', $config->getBranch()));
+        // Check diff with master in case of a new commit on branch with no diff on the bundle
+        $gitNoDiffWithMaster = exec(sprintf('git diff %s master', $config->getBranch())) === '';
+
+        if ($gitNoDiffWithMaster) {
+            ScriptHelper::execWithOutputPrint(sprintf('git checkout master && git push origin --delete %s', $config->getBranch()));
+        }
     }
 }
 
