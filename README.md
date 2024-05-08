@@ -1,9 +1,5 @@
 # GitHub Action for Monorepo Split
 
-**Version 2.0 now supports split to GitHub and Gitlab private repositories!**
-
-<br>
-
 Do you have [a monorepo](https://tomasvotruba.com/cluster/monorepo-from-zero-to-hero/) project on GitHub and need split packages to many repositories? Add this GitHub Action to your workflow and let it split your packages on every commit and tag.
 
 ### How does the Split Result Look Like?
@@ -15,10 +11,6 @@ Try it yourself - send PR with change in [that directory](/tests/packages/some-p
 
 <br>
 
-## Docs
-
-- [How to Use on Gitlab](docs/how_to_use_on_gitlab.md)
-
 ## Config
 
 Split is basically git push or local directory to remote git repository. This remote repository can be located on GitHub or Gitlab. To be able to do that, it needs `GITHUB_TOKEN` or `GITLAB_TOKEN` with write repository access:
@@ -26,8 +18,6 @@ Split is basically git push or local directory to remote git repository. This re
 ```yaml
 env:
     GITHUB_TOKEN: ${{ secrets.ACCESS_TOKEN }}
-    # or
-    GITLAB_TOKEN: ${{ secrets.GITLAB_TOKEN }}
 ```
 
 Make sure to add this access token in "Secrets" of package settings at https://github.com/<organization>/<package>/settings/environments
@@ -37,7 +27,7 @@ Make sure to add this access token in "Secrets" of package settings at https://g
 ## Define your GitHub Workflow
 
 ```yaml
-name: 'Packages Split'
+name: 'Bundles Split'
 
 on:
     push:
@@ -47,11 +37,7 @@ on:
             - '*'
 
 env:
-    # 1. for Github split
     GITHUB_TOKEN: ${{ secrets.ACCESS_TOKEN }}
-
-    # 2. for Gitlab split
-    GITLAB_TOKEN: ${{ secrets.GITLAB_TOKEN }}
 
 jobs:
     packages_split:
@@ -62,9 +48,7 @@ jobs:
             matrix:
                 # define package to repository map
                 package:
-                    -
-                        local_path: 'easy-coding-standard'
-                        split_repository: 'easy-coding-standard'
+                    - { local_path: 'bundles/admin-ui-bundle', split_repository: 'admin-ui-bundle' }
 
         steps:
             -   uses: actions/checkout@v2
@@ -72,40 +56,33 @@ jobs:
             # no tag
             -
                 if: "!startsWith(github.ref, 'refs/tags/')"
-                uses: "symplify/monorepo-split-github-action@2.1"
+                uses: "Eckinox/monorepo-split-github-action@1.0.0"
                 with:
-                    # ↓ split "packages/easy-coding-standard" directory
-                    package_directory: 'packages/${{ matrix.package.local_path }}'
+                    package_directory: '${{ matrix.package.local_path }}'
 
-                    # ↓ into https://github.com/symplify/easy-coding-standard repository
-                    repository_organization: 'symplify'
+                    branch: 'master'
+
+                    repository_organization: 'Eckinox'
                     repository_name: '${{ matrix.package.split_repository }}'
 
-                    # [optional, with "github.com" as default]
-                    repository_host: git.private.com:1234
-
                     # ↓ the user signed under the split commit
-                    user_name: "kaizen-ci"
-                    user_email: "info@kaizen-ci.org"
+                    user_name: 'Eckinox'
+                    user_email: 'dev@eckinox.ca'
 
             # with tag
             -
                 if: "startsWith(github.ref, 'refs/tags/')"
-                uses: "symplify/monorepo-split-github-action@2.1"
+                uses: "Eckinox/monorepo-split-github-action@1.0.0"
                 with:
                     tag: ${GITHUB_REF#refs/tags/}
 
-                    # ↓ split "packages/easy-coding-standard" directory
-                    package_directory: 'packages/${{ matrix.package.local_path }}'
+                    package_directory: '${{ matrix.package.local_path }}'
 
-                    # ↓ into https://github.com/symplify/easy-coding-standard repository
-                    repository_organization: 'symplify'
+                    branch: 'master'
+
+                    repository_organization: 'Eckinox'
                     repository_name: '${{ matrix.package.split_repository }}'
 
-                    # [optional, with "github.com" as default]
-                    repository_host: git.private.com:1234
-
-                    # ↓ the user signed under the split commit
-                    user_name: "kaizen-ci"
-                    user_email: "info@kaizen-ci.org"
+                    user_name: 'Eckinox'
+                    user_email: 'dev@eckinox.ca'
 ```
